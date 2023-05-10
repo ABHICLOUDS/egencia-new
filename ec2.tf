@@ -4,7 +4,7 @@ resource "aws_instance" "example_instance-1" {
   instance_type               = var.instance_type
   key_name                    = var.key_name
   subnet_id                   = aws_subnet.public_subnets[0].id
-  vpc_security_group_ids      = [aws_security_group.example_sg-1.id]
+  vpc_security_group_ids      = [aws_security_group.example_sg1.id]
   associate_public_ip_address = true
   iam_instance_profile        = var.instance_profile_name
   tags = {
@@ -21,7 +21,7 @@ resource "aws_instance" "example_instance-2" {
   instance_type          = var.instance_type
   key_name               = var.key_name
   subnet_id              = aws_subnet.private_subnets[0].id
-  vpc_security_group_ids = [aws_security_group.example_sg-2.id]
+  vpc_security_group_ids = [aws_security_group.example_sg2.id]
   iam_instance_profile   = var.instance_profile_name
   tags = {
     Name = "${var.tags}-il-instance-tf"
@@ -31,52 +31,49 @@ resource "aws_instance" "example_instance-2" {
     volume_type = "gp2"
   }
 }
-
-
-resource "aws_security_group" "example_sg-1" {
-  name_prefix = "${var.tags}-pl-sg-tf"
+resource "aws_security_group" "example_sg1" {
+  name_prefix = "example_sg1"
   vpc_id      = aws_vpc.example_vpc.id
-  dynamic "ingress" {
-    for_each = [22, 80, 8080, 443]
-    iterator = port
-    content {
-      from_port   = port.value
-      to_port     = port.value
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-  }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  tags = {
-    Name = "${var.tags}-pl-sg-tf"
-  }
 }
 
-resource "aws_security_group" "example_sg-2" {
-  name_prefix = "${var.tags}-il-sg-tf"
+resource "aws_security_group" "example_sg2" {
+  name_prefix = "example_sg2"
   vpc_id      = aws_vpc.example_vpc.id
-  dynamic "ingress" {
-    for_each = [22, 80, 8080, 443]
-    iterator = port
-    content {
-      from_port   = port.value
-      to_port     = port.value
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-  }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  tags = {
-    Name = "${var.tags}-il-sg-tf"
-  }
 }
+
+resource "aws_security_group_rule" "sg1_to_sg2_ingress" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = aws_security_group.example_sg2.id
+  source_security_group_id = aws_security_group.example_sg1.id
+}
+
+resource "aws_security_group_rule" "sg1_to_sg2_egress" {
+  type                     = "egress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = aws_security_group.example_sg1.id
+  source_security_group_id = aws_security_group.example_sg2.id
+}
+
+resource "aws_security_group_rule" "sg2_to_sg1_ingress" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = aws_security_group.example_sg1.id
+  source_security_group_id = aws_security_group.example_sg2.id
+}
+
+resource "aws_security_group_rule" "sg2_to_sg1_egress" {
+  type                     = "egress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = aws_security_group.example_sg2.id
+  source_security_group_id = aws_security_group.example_sg1.id
+}
+

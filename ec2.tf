@@ -34,10 +34,12 @@ resource "aws_instance" "example_instance-2" {
 
 resource "aws_security_group" "example_sg1" {
   name_prefix = "example_sg1"
+  vpc_id      = aws_vpc.example_vpc.id
 }
 
 resource "aws_security_group" "example_sg2" {
   name_prefix = "example_sg2"
+  vpc_id      = aws_vpc.example_vpc.id
 }
 
 # Allow all traffic from example_sg2 to example_sg1

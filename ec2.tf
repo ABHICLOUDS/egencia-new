@@ -74,7 +74,7 @@ resource "aws_security_group_rule" "sg1_to_sg2_ingress" {
   to_port                  = 0
   protocol                 = "-1"
   security_group_id       = aws_security_group.example_sg2.id
-  source_security_group_id = aws_security_group.example_sg1.i
+  source_security_group_id = aws_security_group.example_sg1.id
 }
 
 resource "aws_security_group_rule" "sg1_to_sg2_egress" {

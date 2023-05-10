@@ -1,48 +1,50 @@
 # Create EC2 instance
-resource "aws_instance" "example_instance-1" {
+resource "aws_instance" "example_instances" {
+  count                       = var.pl_count
   ami                         = var.ami_id
   instance_type               = var.instance_type
   key_name                    = var.key_name
-  subnet_id                   = aws_subnet.public_subnets[0].id
+  subnet_id                   = element(aws_subnet.public_subnets.*.id, count.index)
   vpc_security_group_ids      = [aws_security_group.example_sg1.id]
   associate_public_ip_address = true
   iam_instance_profile        = var.instance_profile_name
   tags = {
-    Name = "${var.tags}-pl-instance-tf"
+    Name = "${var.tags}-pl-instance${count.index + 1}-tf"
   }
   root_block_device {
-    volume_size = 10
-    volume_type = "gp2"
+    volume_size = var.ebs_volume
+    volume_type = var.ebs_volume_type
   }
 }
 
 resource "aws_instance" "example_instance-2" {
+  count                  = var.il_count
   ami                    = var.ami_id
   instance_type          = var.instance_type
   key_name               = var.key_name
-  subnet_id              = aws_subnet.private_subnets[0].id
+  subnet_id              = element(aws_subnet.private_subnets.*.id, count.index)
   vpc_security_group_ids = [aws_security_group.example_sg2.id]
   iam_instance_profile   = var.instance_profile_name
   tags = {
     Name = "${var.tags}-il-instance-tf"
   }
   root_block_device {
-    volume_size = 10
-    volume_type = "gp2"
+    volume_size = var.ebs_volume
+    volume_type = var.ebs_volume_type
   }
 }
 resource "aws_security_group" "example_sg1" {
   name_prefix = "example_sg1"
   vpc_id      = aws_vpc.example_vpc.id
- tags = {
-   Name = "${var.tags}-pl-sg-tf"
+  tags = {
+    Name = "${var.tags}-pl-sg-tf"
   }
 }
 
 resource "aws_security_group" "example_sg2" {
   name_prefix = "example_sg2"
   vpc_id      = aws_vpc.example_vpc.id
- tags = {
+  tags = {
     Name = "${var.tags}-il-sg-tf"
   }
 }
@@ -73,7 +75,7 @@ resource "aws_security_group_rule" "sg1_to_sg2_ingress" {
   from_port                = 0
   to_port                  = 0
   protocol                 = "-1"
-  security_group_id       = aws_security_group.example_sg2.id
+  security_group_id        = aws_security_group.example_sg2.id
   source_security_group_id = aws_security_group.example_sg1.id
 }
 

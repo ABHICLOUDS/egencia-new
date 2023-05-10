@@ -36,3 +36,18 @@ variable "tags" {
 variable "instance_profile_name" {
   type = string
 }
+variable "ebs_volume" {
+  type = number
+}
+
+variable "ebs_volume_type" {
+  type = string
+}
+
+variable "pl_count" {
+  type = number
+}
+
+variable "il_count" {
+  type = number
+}

@@ -34,19 +34,46 @@ resource "aws_instance" "example_instance-2" {
 resource "aws_security_group" "example_sg1" {
   name_prefix = "example_sg1"
   vpc_id      = aws_vpc.example_vpc.id
+ tags = {
+   Name = "${var.tags}-pl-sg-tf"
+  }
 }
 
 resource "aws_security_group" "example_sg2" {
   name_prefix = "example_sg2"
   vpc_id      = aws_vpc.example_vpc.id
+ tags = {
+    Name = "${var.tags}-il-sg-tf"
+  }
 }
+#data "aws_security_group" "example_sg3" {
+#  id = "sg-0097dd712ff81570b"
+#}
+
+#resource "aws_security_group_rule" "sg1_to_sg3_ingress" {
+#  type                     = "ingress"
+#  from_port                = 0
+#  to_port                  = 0
+#  protocol                 = "-1"
+#  security_group_id       = aws_security_group.example_sg1.id
+#  source_security_group_id = data.aws_security_group.example_sg3.id
+#}
+
+#resource "aws_security_group_rule" "sg2_to_sg3_ingress" {
+#  type                     = "ingress"
+#  from_port                = 0
+#  to_port                  = 0
+#  protocol                 = "-1"
+#  security_group_id       = aws_security_group.example_sg2.id
+#  source_security_group_id = data.aws_security_group.example_sg3.id
+#}
 
 resource "aws_security_group_rule" "sg1_to_sg2_ingress" {
   type                     = "ingress"
   from_port                = 0
   to_port                  = 0
   protocol                 = "-1"
-  security_group_id        = aws_security_group.example_sg2.id
+  security_group_id       = aws_security_group.example_sg2.id
   source_security_group_id = aws_security_group.example_sg1.id
 }
 

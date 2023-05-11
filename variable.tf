@@ -51,3 +51,19 @@ variable "pl_count" {
 variable "il_count" {
   type = number
 }
+
+variable "load_balancer_type" {
+  type = string
+}
+
+variable "tg_port" {
+  type = number
+}
+
+varivariable "listner_port" {
+  type= number
+} 
+
+varivariable "tg_attach_port" {
+  type= number
+} 

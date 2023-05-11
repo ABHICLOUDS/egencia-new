@@ -60,10 +60,10 @@ variable "tg_port" {
   type = number
 }
 
-varivariable "listner_port" {
+variable "listner_port" {
   type= number
 } 
 
-varivariable "tg_attach_port" {
+variable "tg_attach_port" {
   type= number
 } 

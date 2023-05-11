@@ -60,6 +60,10 @@ variable "tg_port" {
   type = number
 }
 
+variable "tg_protocol" {
+  type = string
+}
+
 variable "listner_port" {
   type= number
 } 

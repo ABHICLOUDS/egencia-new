@@ -68,6 +68,10 @@ variable "listner_port" {
   type= number
 } 
 
+variable "listner_protocol" {
+  type= string
+} 
+
 variable "tg_attach_port" {
   type= number
 } 

@@ -16,6 +16,10 @@ resource "aws_lb_target_group" "example_target_group" {
   protocol = var.tg_protocol
   vpc_id   = aws_vpc.example_vpc.id
 
+  health_check {
+    path = var.hc_path
+  }
+
   tags = {
     Name = "${var.tags}-example-target-group"
   }

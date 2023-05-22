@@ -75,3 +75,7 @@ variable "listner_protocol" {
 variable "tg_attach_port" {
   type= number
 } 
+
+variable "var.hc_path" {
+  type =string
+}

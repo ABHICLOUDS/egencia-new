@@ -8,6 +8,7 @@ resource "aws_instance" "example_instances" {
   vpc_security_group_ids      = [aws_security_group.example_sg1.id]
   associate_public_ip_address = true
   iam_instance_profile        = var.instance_profile_name
+  user_data = data.template_file.user_data.rendered
   tags = {
     Name = "${var.tags}-pl-instance${count.index + 1}-tf"
   }

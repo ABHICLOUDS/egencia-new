@@ -76,6 +76,6 @@ variable "tg_attach_port" {
   type= number
 } 
 
-variable "var.hc_path" {
+variable "hc_path" {
   type =string
 }

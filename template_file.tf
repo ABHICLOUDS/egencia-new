@@ -1,9 +1,9 @@
-data "aws_s3_bucket_object" "this" {
+data "aws_s3_object" "this" {
   bucket = "demo-8795"
   key    = "apache-tomcat-7.0.64-PL.tar"
 }
 
-data "aws_s3_bucket_object" "war_file" {
+data "aws_s3_object" "war_file" {
   bucket = "demo-8795"
   key    = "egencia.war"
 }

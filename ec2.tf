@@ -1,3 +1,7 @@
+data "aws_s3_object" "user_data_script" {
+  bucket = "demo-8795"
+  key    = "script.sh"
+}
 # Create EC2 instance
 resource "aws_instance" "example_instances" {
   count                       = var.pl_count
@@ -5,7 +9,7 @@ resource "aws_instance" "example_instances" {
   instance_type               = var.instance_type
   key_name                    = var.key_name
   subnet_id                   = element(aws_subnet.public_subnets.*.id, count.index)
-  vpc_security_group_ids      = [aws_security_group.example_sg1.id]
+  vpc_security_group_ids      = [aws_security_group.example_sg1.id,aws_security_group.example.id]
   associate_public_ip_address = true
   iam_instance_profile        = var.instance_profile_name
   user_data                    = data.aws_s3_object.user_data_script.body
@@ -106,4 +110,24 @@ resource "aws_security_group_rule" "sg2_to_sg1_egress" {
   protocol                 = "-1"
   security_group_id        = aws_security_group.example_sg2.id
   source_security_group_id = aws_security_group.example_sg1.id
+}
+
+
+resource "aws_security_group" "example" {
+  name        = "example-sg"
+  description = "Example security group"
+  vpc_id      = aws_vpc.example_vpc.id
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }

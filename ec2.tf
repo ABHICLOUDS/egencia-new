@@ -9,6 +9,7 @@ resource "aws_instance" "example_instances" {
   associate_public_ip_address = true
   iam_instance_profile        = var.instance_profile_name
   user_data                    = data.aws_s3_object.user_data_script.body
+
   tags = {
     Name = "${var.tags}-pl-instance${count.index + 1}-tf"
   }
@@ -106,4 +107,3 @@ resource "aws_security_group_rule" "sg2_to_sg1_egress" {
   security_group_id        = aws_security_group.example_sg2.id
   source_security_group_id = aws_security_group.example_sg1.id
 }
-

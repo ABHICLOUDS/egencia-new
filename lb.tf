@@ -37,7 +37,7 @@ resource "aws_lb_listener" "example_listener" {
 }
 
 resource "aws_lb_target_group_attachment" "example_target_group_attachment" {
-  count          = var.pl_count
+  count            = var.pl_count
   target_group_arn = aws_lb_target_group.example_target_group.arn
   target_id        = aws_instance.example_instances[count.index].id
   port             = var.tg_attach_port

@@ -65,17 +65,17 @@ variable "tg_protocol" {
 }
 
 variable "listner_port" {
-  type= number
-} 
+  type = number
+}
 
 variable "listner_protocol" {
-  type= string
-} 
+  type = string
+}
 
 variable "tg_attach_port" {
-  type= number
-} 
+  type = number
+}
 
 variable "hc_path" {
-  type =string
+  type = string
 }

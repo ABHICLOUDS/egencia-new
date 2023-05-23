@@ -2,7 +2,7 @@ resource "aws_lb" "example_lb" {
   name               = "${var.tags}-example-lb"
   internal           = false
   load_balancer_type = var.load_balancer_type
-  security_groups    = [aws_security_group.example_sg1.id]
+  security_groups    = [aws_security_group.example.id]
   subnets            = aws_subnet.public_subnets.*.id
 
   tags = {

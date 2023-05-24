@@ -25,18 +25,14 @@ resource "aws_instance" "example_instances" {
   }
 }
 
-data "aws_instance" "preceding_instance" {
-  count       = var.pl_count > 1 ? var.pl_count - 1 : 0
-  instance_id = aws_instance.example_instances[count.index].id
-}
-
 resource "null_resource" "depends_on_example_instances" {
   count      = var.pl_count
-  depends_on = [aws_instance.example_instances[count.index]]
+  depends_on = [aws_instance.example_instances[count.index].id]
   triggers = {
     instance_id = aws_instance.example_instances[count.index].id
   }
 }
+
 
 
 resource "aws_instance" "example_instance-2" {

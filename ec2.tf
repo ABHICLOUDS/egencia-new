@@ -21,9 +21,13 @@ resource "aws_instance" "example_instances" {
   }
 }
 
+locals {
+  preceding_instance_index = max(0, count.index - 1)
+}
+
 resource "null_resource" "depends_on_example_instances" {
   count       = var.pl_count
-  depends_on  = [aws_instance.example_instances[count.index > 0 ? count.index - 1 : 0].id]
+  depends_on  = [aws_instance.example_instances[local.preceding_instance_index].id]
 
   triggers = {
     instance_id = aws_instance.example_instances[count.index].id

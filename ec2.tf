@@ -1,6 +1,6 @@
 data "aws_s3_object" "user_data_script" {
-  bucket = "demo-8795"
-  key    = "script.sh"
+  bucket = var.bucket_name
+  key    = var.bucket_pl_script
 }
 # Create EC2 instance
 resource "aws_instance" "example_instances" {
@@ -10,12 +10,10 @@ resource "aws_instance" "example_instances" {
   key_name                    = var.key_name
   subnet_id                   = element(aws_subnet.public_subnets.*.id, count.index)
   vpc_security_group_ids      = [aws_security_group.example_sg1.id,aws_security_group.example.id]
-  associate_public_ip_address = true
   iam_instance_profile        = var.instance_profile_name
   user_data                    = data.aws_s3_object.user_data_script.body
-
   tags = {
-    Name = "${var.tags}-pl-instance${count.index + 1}-tf"
+    Name      = "${var.tags}-pl-instance${count.index + 1}-tf-${aws_instance.example.private_ip}"
   }
   root_block_device {
     volume_size = var.ebs_volume
@@ -29,7 +27,7 @@ resource "aws_instance" "example_instance-2" {
   instance_type          = var.instance_type
   key_name               = var.key_name
   subnet_id              = element(aws_subnet.private_subnets.*.id, count.index)
-  vpc_security_group_ids = [aws_security_group.example_sg2.id]
+  vpc_security_group_ids = [aws_security_group.example_sg2.id,aws_security_group.example.id]
   iam_instance_profile   = var.instance_profile_name
   tags = {
     Name = "${var.tags}-il-instance-tf"
@@ -39,9 +37,10 @@ resource "aws_instance" "example_instance-2" {
     volume_type = var.ebs_volume_type
   }
 }
+
 resource "aws_security_group" "example_sg1" {
   name_prefix = "example_sg1"
-  vpc_id      = aws_vpc.example_vpc.id
+  vpc_id      = aws_vpc.this_vpc.id
   tags = {
     Name = "${var.tags}-pl-sg-tf"
   }
@@ -49,7 +48,7 @@ resource "aws_security_group" "example_sg1" {
 
 resource "aws_security_group" "example_sg2" {
   name_prefix = "example_sg2"
-  vpc_id      = aws_vpc.example_vpc.id
+  vpc_id      = aws_vpc.this_vpc.id
   tags = {
     Name = "${var.tags}-il-sg-tf"
   }
@@ -116,18 +115,22 @@ resource "aws_security_group_rule" "sg2_to_sg1_egress" {
 resource "aws_security_group" "example" {
   name        = "example-sg"
   description = "Example security group"
-  vpc_id      = aws_vpc.example_vpc.id
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+  vpc_id      = aws_vpc.this_vpc.id
+  dynamic "ingress" {
+    for_each = var.sg_port
+    iterator = port
+    content {
+      description = "TLS from VPC"
+      from_port   = port.value
+      to_port     = port.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
-
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
   }
 }

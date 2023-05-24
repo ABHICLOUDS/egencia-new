@@ -79,3 +79,15 @@ variable "tg_attach_port" {
 variable "hc_path" {
   type = string
 }
+
+variable "bucket_name" {
+  type = string
+}
+
+variable "bucket_pl_script" {
+  type = string
+}
+
+variable "sg_port" {
+  type = list(number)
+}

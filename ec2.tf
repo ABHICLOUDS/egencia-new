@@ -1,4 +1,4 @@
-data "aws_s3_bucket_object" "user_data_script" {
+data "aws_s3_object" "user_data_script" {
   bucket = var.bucket_name
   key    = var.bucket_pl_script
 }
@@ -11,7 +11,7 @@ resource "aws_instance" "example_instances" {
   subnet_id                   = element(aws_subnet.public_subnets.*.id, count.index)
   vpc_security_group_ids      = [aws_security_group.example_sg1.id, aws_security_group.example.id]
   iam_instance_profile        = var.instance_profile_name
-  user_data                   = data.aws_s3_bucket_object.user_data_script.body
+  user_data                   = data.aws_s3_object.user_data_script.body
   tags = {
     Name      = "${var.tags}-pl-instance${count.index + 1}-tf"
   }

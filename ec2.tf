@@ -1,4 +1,4 @@
-data "aws_s3_object" "user_data_script" {
+data "aws_s3_bucket_object" "user_data_script" {
   bucket = var.bucket_name
   key    = var.bucket_pl_script
 }
@@ -11,7 +11,7 @@ resource "aws_instance" "example_instances" {
   subnet_id                   = element(aws_subnet.public_subnets.*.id, count.index)
   vpc_security_group_ids      = [aws_security_group.example_sg1.id, aws_security_group.example.id]
   iam_instance_profile        = var.instance_profile_name
-  user_data                   = data.aws_s3_object.user_data_script.body
+  user_data                   = data.aws_s3_bucket_object.user_data_script.body
   tags = {
     Name = "${var.tags}-pl-instance${count.index + 1}-tf-${self.private_ip}"
   }
@@ -19,7 +19,7 @@ resource "aws_instance" "example_instances" {
     volume_size = var.ebs_volume
     volume_type = var.ebs_volume_type
   }
-
+  
   lifecycle {
     create_before_destroy = true
   }
@@ -30,12 +30,14 @@ data "aws_instance" "preceding_instance" {
   instance_id = aws_instance.example_instances[count.index].id
 }
 
-
-data "aws_instance" "preceding_instance" {
-  count = var.pl_count > 1 ? var.pl_count - 1 : 0
+resource "null_resource" "depends_on_example_instances" {
+  count      = var.pl_count
   depends_on = [aws_instance.example_instances[count.index]]
-  instance_id = aws_instance.example_instances[count.index].id
+  triggers = {
+    instance_id = aws_instance.example_instances[count.index].id
+  }
 }
+
 
 resource "aws_instance" "example_instance-2" {
   count                  = var.il_count

@@ -19,6 +19,8 @@ resource "aws_instance" "example_instances" {
     volume_size = var.ebs_volume
     volume_type = var.ebs_volume_type
   }
+
+  depends_on = [aws_instance.example_instances[count.index > 0 ? count.index - 1 : 0]]
 }
 
 resource "aws_instance" "example_instance-2" {

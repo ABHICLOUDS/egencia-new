@@ -1,7 +1,7 @@
 # VPC
 resource "aws_vpc" "this_vpc" {
   cidr_block = var.vpc_cidr_block
-  tags = merge(var.tags, { "Name"= format("%s-$s-vpc", var.appname, var.env)})  
+  tags = merge(var.tags, { "Name" = format("%s-%s-vpc", var.appname, var.env) })  
 }
 
 # Create public subnets
@@ -39,7 +39,7 @@ resource "aws_internet_gateway" "example_igw" {
 resource "aws_eip" "example_eip" {
   vpc = true
   tags = {
-    Name = "${var.tags}-eip-tf"
+    Name = "${var.tags["Name"]}-eip-tf"
   }
 }
 

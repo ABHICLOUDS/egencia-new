@@ -11,9 +11,7 @@ resource "aws_subnet" "public_subnets" {
   vpc_id            = aws_vpc.this_vpc.id
   availability_zone = var.public_subnet_azs[count.index]
   map_public_ip_on_launch = true
-  tags = {
-    Name = "${var.tags}-public-sub-${count.index + 1}"
-  }
+  tags = merge(var.tags, { "Name" = format("%s-%s-public-sub", var.appname, var.env) })
 }
 
 # Create private subnets
@@ -22,41 +20,31 @@ resource "aws_subnet" "private_subnets" {
   cidr_block        = var.private_subnet_cidr_blocks[count.index]
   vpc_id            = aws_vpc.this_vpc.id
   availability_zone = var.private_subnet_azs[count.index]
-  tags = {
-    Name = "${var.tags}-private-sub-${count.index + 1}"
-  }
+  tags =merge(var.tags, { "Name" = format("%s-%s-private-sub", var.appname, var.env) })
 }
 
 # Create internet gateway
 resource "aws_internet_gateway" "example_igw" {
   vpc_id = aws_vpc.this_vpc.id
-  tags = {
-    Name = "${var.tags}-IGW-tf"
-  }
+  tags = merge(var.tags, { "Name" = format("%s-%s-igw-tf", var.appname, var.env) })
 }
 
 # Create NAT gateway
 resource "aws_eip" "example_eip" {
   vpc = true
-  tags = {
-    Name = "${var.tags["Name"]}-eip-tf"
-  }
+  tags = merge(var.tags, { "Name" = format("%s-%s-nat-tf-eip", var.appname, var.env) })
 }
 
 resource "aws_nat_gateway" "example_nat_gateway" {
   allocation_id = aws_eip.example_eip.id
   subnet_id     = aws_subnet.public_subnets[0].id
-  tags = {
-    Name = "${var.tags}-nat-tf"
-  }
+  tags = merge(var.tags, { "Name" = format("%s-%s-nat-tf", var.appname, var.env) })
 }
 
 # Create public route table
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.this_vpc.id
-  tags = {
-    Name = "${var.tags}-public-rt-tf"
-  }
+  tags = merge(var.tags, { "Name" = format("%s-%s-public-rt-tf", var.appname, var.env) })
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -74,9 +62,7 @@ resource "aws_route_table_association" "public_route_table_association" {
 # Create private route table
 resource "aws_route_table" "private_route_table" {
   vpc_id = aws_vpc.this_vpc.id
-  tags = {
-    Name = "${var.tags}-private-rt-tf"
-  }
+  tags = merge(var.tags, { "Name" = format("%s-%s-private-rt-tf", var.appname, var.env) })
 
   route {
     cidr_block     = "0.0.0.0/0"

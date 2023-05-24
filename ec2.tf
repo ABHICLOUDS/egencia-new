@@ -1,7 +1,6 @@
-locals {
-  private_ips = [
-    for i in range(var.pl_count) : aws_instance.example_instances[i].private_ip
-  ]
+data "aws_s3_bucket_object" "user_data_script" {
+  bucket = var.bucket_name
+  key    = var.bucket_pl_script
 }
 
 resource "aws_instance" "example_instances" {
@@ -14,37 +13,13 @@ resource "aws_instance" "example_instances" {
   iam_instance_profile        = var.instance_profile_name
   user_data                   = data.aws_s3_bucket_object.user_data_script.body
   tags = {
-    Name = "${var.tags}-pl-instance${count.index + 1}-tf-${aws_instance.example_instances[count.index].private_ip}"
+    Name      = "${var.tags}-pl-instance${count.index + 1}-tf"
   }
   root_block_device {
     volume_size = var.ebs_volume
     volume_type = var.ebs_volume_type
   }
 }
-
-data "aws_s3_bucket_object" "user_data_script" {
-  bucket = var.bucket_name
-  key    = var.bucket_pl_script
-}
-
-resource "null_resource" "depends_on_example_instances" {
-  count = var.pl_count
-
-  depends_on = [
-    aws_instance.example_instances[count.index]
-  ]
-
-  triggers = {
-    instance_id = aws_instance.example_instances[count.index].id
-  }
-}
-
-
-
-
-
-
-
 
 resource "aws_instance" "example_instance-2" {
   count                  = var.il_count

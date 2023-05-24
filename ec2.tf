@@ -19,19 +19,23 @@ resource "aws_instance" "example_instances" {
     volume_size = var.ebs_volume
     volume_type = var.ebs_volume_type
   }
-  
+
   lifecycle {
     create_before_destroy = true
+    depends_on            = [
+      aws_instance.example_instances[count.index > 0 ? count.index - 1 : 0]
+    ]
   }
 }
 
 resource "null_resource" "depends_on_example_instances" {
-  count      = var.pl_count
-  depends_on = [aws_instance.example_instances[count.index].id]
+  count = var.pl_count
+
   triggers = {
     instance_id = aws_instance.example_instances[count.index].id
   }
 }
+
 
 
 

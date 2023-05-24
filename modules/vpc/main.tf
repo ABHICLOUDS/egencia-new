@@ -1,10 +1,7 @@
 # VPC
 resource "aws_vpc" "this_vpc" {
   cidr_block = var.vpc_cidr_block
-
-  tags = {
-    Name = "${var.tags}-vpc-tf"
-  }
+  tags = merge(var.tags, { "Name"= format("%s-$s-vpc", var.appname, var.env)})  
 }
 
 # Create public subnets

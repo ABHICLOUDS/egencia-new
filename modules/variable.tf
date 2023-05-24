@@ -1,22 +1,6 @@
-variable "vpc_cidr_block" {}
+
 
 variable "aws_region" {}
-
-variable "public_subnet_cidr_blocks" {
-  type = list(string)
-}
-
-variable "private_subnet_cidr_blocks" {
-  type = list(string)
-}
-
-variable "public_subnet_azs" {
-  type = list(string)
-}
-
-variable "private_subnet_azs" {
-  type = list(string)
-}
 
 variable "instance_type" {
   type = string

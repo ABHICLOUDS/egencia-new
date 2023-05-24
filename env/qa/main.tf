@@ -13,7 +13,7 @@ provider "aws" {
 
 
 module "vpc" {
-  source            = "../../modules/vpc"
+  source            = "../../modules"
   tags = var.tags
   vpc_cidr_block    = var.vpc_cidr_block
   public_subnet_cidr_blocks=var.public_subnet_cidr_blocks

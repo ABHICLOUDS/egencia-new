@@ -30,12 +30,9 @@ data "aws_s3_bucket_object" "user_data_script" {
 resource "null_resource" "depends_on_example_instances" {
   count = var.pl_count
 
-  dynamic "depends_on" {
-    for_each = count.index > 0 ? [aws_instance.example_instances[count.index - 1]] : []
-    content {
-      resource_arn = depends_on.value.id
-    }
-  }
+  depends_on = [
+    aws_instance.example_instances[count.index]
+  ]
 
   triggers = {
     instance_id = aws_instance.example_instances[count.index].id

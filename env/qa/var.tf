@@ -21,3 +21,16 @@ variable "public_subnet_azs" {
 variable "private_subnet_azs" {
   type = list(string)
 }
+
+variable "tags" {
+  type = map(string)
+}
+
+
+variable "appname" {
+  type = string
+}
+
+variable "env" {
+  type = string
+}

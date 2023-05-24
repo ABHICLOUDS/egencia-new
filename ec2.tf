@@ -13,7 +13,7 @@ resource "aws_instance" "example_instances" {
   iam_instance_profile        = var.instance_profile_name
   user_data                   = data.aws_s3_object.user_data_script.body
   tags = {
-    Name = "${var.tags}-pl-instance${count.index + 1}-tf-${self.private_ip}"
+    Name = "${var.tags}-pl-instance${count.index + 1}-tf-${aws_instance.example_instances.*.private_ip[count.index]}"
   }
   root_block_device {
     volume_size = var.ebs_volume

@@ -1,4 +1,3 @@
-Copy code
 data "aws_s3_object" "user_data_script" {
   bucket = var.bucket_name
   key    = var.bucket_pl_script
@@ -14,7 +13,7 @@ resource "aws_instance" "example_instances" {
   iam_instance_profile        = var.instance_profile_name
   user_data                   = data.aws_s3_object.user_data_script.body
   tags = {
-    Name = "${var.tags}-pl-instance${count.index + 1}-tf-${aws_instance.example_instances[count.index].private_ip}"
+    Name = "${var.tags}-pl-instance${count.index + 1}-tf-${self.private_ip}"
   }
   root_block_device {
     volume_size = var.ebs_volume
@@ -25,6 +24,12 @@ resource "aws_instance" "example_instances" {
     create_before_destroy = true
   }
 }
+
+data "aws_instance" "preceding_instance" {
+  count       = var.pl_count > 1 ? var.pl_count - 1 : 0
+  instance_id = aws_instance.example_instances[count.index].id
+}
+
 
 data "aws_instance" "preceding_instance" {
   count = var.pl_count > 1 ? var.pl_count - 1 : 0

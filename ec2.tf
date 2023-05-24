@@ -2,18 +2,18 @@ data "aws_s3_object" "user_data_script" {
   bucket = var.bucket_name
   key    = var.bucket_pl_script
 }
-# Create EC2 instance
+
 resource "aws_instance" "example_instances" {
   count                       = var.pl_count
   ami                         = var.ami_id
   instance_type               = var.instance_type
   key_name                    = var.key_name
   subnet_id                   = element(aws_subnet.public_subnets.*.id, count.index)
-  vpc_security_group_ids      = [aws_security_group.example_sg1.id,aws_security_group.example.id]
+  vpc_security_group_ids      = [aws_security_group.example_sg1.id, aws_security_group.example.id]
   iam_instance_profile        = var.instance_profile_name
-  user_data                    = data.aws_s3_object.user_data_script.body
+  user_data                   = data.aws_s3_object.user_data_script.body
   tags = {
-    Name      = "${var.tags}-pl-instance${count.index + 1}-tf-${aws_instance.example_instances[count.index].private_ip}"
+    Name = "${var.tags}-pl-instance${count.index + 1}-tf-${self.private_ip}"
   }
   root_block_device {
     volume_size = var.ebs_volume

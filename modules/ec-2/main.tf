@@ -12,9 +12,8 @@ resource "aws_instance" "example_instances" {
   vpc_security_group_ids      = [aws_security_group.example_sg1.id, aws_security_group.example.id]
   iam_instance_profile        = var.instance_profile_name
   user_data                   = data.aws_s3_object.user_data_script.body
-  tags = {
-    Name      = "${var.tags}-pl-instance${count.index + 1}-tf"
-  }
+  tags = merge(var.tags, { "Name" = format("%s-%s-pl-instance", var.appname, var.env) })
+
   root_block_device {
     volume_size = var.ebs_volume
     volume_type = var.ebs_volume_type
@@ -29,9 +28,7 @@ resource "aws_instance" "example_instance-2" {
   subnet_id              = element(aws_subnet.private_subnets.*.id, count.index)
   vpc_security_group_ids = [aws_security_group.example_sg2.id,aws_security_group.example.id]
   iam_instance_profile   = var.instance_profile_name
-  tags = {
-    Name = "${var.tags}-il-instance-tf"
-  }
+  tags =merge(var.tags, { "Name" = format("%s-%s-il-instance-tf", var.appname, var.env) })
   root_block_device {
     volume_size = var.ebs_volume
     volume_type = var.ebs_volume_type
@@ -42,18 +39,14 @@ resource "aws_security_group" "example_sg1" {
   name_prefix = "example_sg1"
   #vpc_id      = aws_vpc.this_vpc.id
   vpc_id                 = var.vpc_id
-  tags = {
-    Name = "${var.tags}-pl-sg-tf"
-  }
+  tags =merge(var.tags, { "Name" = format("%s-%s-pl-sg-tf", var.appname, var.env) }) 
 }
 
 resource "aws_security_group" "example_sg2" {
   name_prefix = "example_sg2"
   #vpc_id      = aws_vpc.this_vpc.id
   vpc_id                 = var.vpc_id
-  tags = {
-    Name = "${var.tags}-il-sg-tf"
-  }
+  tags = merge(var.tags, { "Name" = format("%s-%s-il-sg-tf", var.appname, var.env) })
 }
 #data "aws_security_group" "example_sg3" {
 #  id = "sg-0097dd712ff81570b"

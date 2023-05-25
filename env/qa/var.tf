@@ -76,3 +76,4 @@ variable "ebs_volume" {
 variable "ebs_volume_type" {
   type = string
 }
+

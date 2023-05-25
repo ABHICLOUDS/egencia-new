@@ -35,4 +35,7 @@ module "ec-2" {
   key_name=var.key_name
   ebs_volume=var.ebs_volume
   ebs_volume_type=var.ebs_volume_type
+  instance_profile_name=var.instance_profile_name
+  sg_port=var.sg_port
+
 }

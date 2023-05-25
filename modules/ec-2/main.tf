@@ -40,7 +40,8 @@ resource "aws_instance" "example_instance-2" {
 
 resource "aws_security_group" "example_sg1" {
   name_prefix = "example_sg1"
-  vpc_id      = aws_vpc.this_vpc.id
+  #vpc_id      = aws_vpc.this_vpc.id
+  vpc_id                 = var.vpc_id
   tags = {
     Name = "${var.tags}-pl-sg-tf"
   }
@@ -48,7 +49,8 @@ resource "aws_security_group" "example_sg1" {
 
 resource "aws_security_group" "example_sg2" {
   name_prefix = "example_sg2"
-  vpc_id      = aws_vpc.this_vpc.id
+  #vpc_id      = aws_vpc.this_vpc.id
+  vpc_id                 = var.vpc_id
   tags = {
     Name = "${var.tags}-il-sg-tf"
   }

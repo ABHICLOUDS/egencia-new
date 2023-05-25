@@ -40,7 +40,18 @@ variable "ebs_volume_type" {
   type = string
 }
 
+variable "tags" {
+  type = map(string)
+}
 
+
+variable "appname" {
+  type = string
+}
+
+variable "env" {
+  type = string
+}
 
 
 

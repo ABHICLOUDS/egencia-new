@@ -23,3 +23,16 @@ module "vpc" {
   private_subnet_cidr_blocks=var.private_subnet_cidr_blocks
   private_subnet_azs=var.private_subnet_azs
 }
+
+module "ec2" {
+  source            = "../../modules/ec2"
+  bucket_name=var.bucket_name
+  bucket_pl_script=var.bucket_pl_script
+  pl_count=var.pl_count
+  il_count=var.il_count
+  ami_id=var.ami_id
+  instance_type=var.instance_type
+  key_name=var.key_name
+  ebs_volume=var.ebs_volume
+  ebs_volume_type=var.ebs_volume_type
+}

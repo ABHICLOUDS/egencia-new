@@ -115,7 +115,8 @@ resource "aws_security_group_rule" "sg2_to_sg1_egress" {
 resource "aws_security_group" "example" {
   name        = "example-sg"
   description = "Example security group"
-  vpc_id      = aws_vpc.this_vpc.id
+  #vpc_id      = aws_vpc.this_vpc.id
+  vpc_id                 = var.vpc_id
   dynamic "ingress" {
     for_each = var.sg_port
     iterator = port
@@ -133,4 +134,9 @@ resource "aws_security_group" "example" {
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
   }
+}
+
+variable "vpc_id" {
+  description = "ID of the VPC"
+  type        = string
 }

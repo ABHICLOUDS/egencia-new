@@ -24,8 +24,8 @@ module "vpc" {
   private_subnet_azs=var.private_subnet_azs
 }
 
-module "ec2" {
-  source            = "../../modules/ec2"
+module "ec-2" {
+  source            = "../../modules/ec-2"
   bucket_name=var.bucket_name
   bucket_pl_script=var.bucket_pl_script
   pl_count=var.pl_count

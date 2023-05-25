@@ -38,5 +38,8 @@ module "ec-2" {
   ebs_volume_type=var.ebs_volume_type
   instance_profile_name=var.instance_profile_name
   sg_port=var.sg_port
+  appname=var.appname
+  env=var.env
+  tags = var.tags
 
 }

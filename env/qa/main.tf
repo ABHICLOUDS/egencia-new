@@ -37,7 +37,7 @@ module "vpc" {
 }
 
 module "ec2" {
-  source  = "../../modules/ec2"
+  source  = "../../modules/ec-2"
   # Pass module-specific variables here
   bucket_name            = "example-bucket"
   bucket_pl_script       = "example-script.sh"

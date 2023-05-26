@@ -46,7 +46,7 @@ module "ec-2" {
 
 # Internet-facing (PL) load balancer
 module "pl_lb" {
-  source = "./modules/load_balancer"
+  source = "../../modules/alb"
 
   alb_name               = "${var.tags["Name"]}-example-lb"
   internal               = false
@@ -70,7 +70,7 @@ module "pl_lb" {
 
 # Internal (IL) load balancer
 module "il_lb" {
-  source = "./modules/load_balancer"
+  source = "../../modules/alb"
 
   alb_name               = "${var.tags["Name"]}-example-ilb"
   internal               = true

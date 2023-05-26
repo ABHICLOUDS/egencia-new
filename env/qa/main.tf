@@ -16,7 +16,7 @@ provider "aws" {
 # main.tf
 
 module "vpc" {
-  source  = "./vpc"
+  source  = "../../modules/vpc"
   # Pass module-specific variables here
   vpc_cidr_block             = "10.0.0.0/16"
   public_subnet_cidr_blocks  = ["10.0.1.0/24", "10.0.2.0/24"]
@@ -37,7 +37,7 @@ module "vpc" {
 }
 
 module "ec2" {
-  source  = "./ec2"
+  source  = "../../modules/ec2"
   # Pass module-specific variables here
   bucket_name            = "example-bucket"
   bucket_pl_script       = "example-script.sh"
@@ -59,7 +59,7 @@ module "ec2" {
 }
 
 module "pl_alb" {
-  source  = "./alb"
+  source  = "../../../modules/alb"
   # Pass module-specific variables here
   alb_name               = "pl-example-alb"
   internal               = false
@@ -83,7 +83,7 @@ module "pl_alb" {
 }
 
 module "il_alb" {
-  source  = "./alb"
+  source  = "../../modules/alb"
   # Pass module-specific variables here
   alb_name               = "il-example-alb"
   internal               = true

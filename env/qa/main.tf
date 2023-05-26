@@ -52,7 +52,7 @@ module "pl_lb" {
   internal               = false
   load_balancer_type     = "application"
   security_groups        = [aws_security_group.example.id]
-  subnets                = module.vpc.public_subnet_ids
+  subnets                = module.vpc.public_subnet
 
   target_group_name      = "${var.tags["Name"]}-example-pl-tg"
   target_group_port      = var.tg_port
@@ -74,7 +74,7 @@ module "il_lb" {
   internal               = true
   load_balancer_type     = "application"
   security_groups        = [aws_security_group.example.id]
-  subnets                = module.vpc.private_subnet_ids
+  subnets                = module.vpc.private_subnet
 
   target_group_name      = "${var.tags["Name"]}-example-il-tg"
   target_group_port      = var.tg_port

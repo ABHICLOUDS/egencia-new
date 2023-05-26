@@ -52,7 +52,7 @@ module "pl_lb" {
   internal               = false
   load_balancer_type     = "application"
   security_groups        = [aws_security_group.example.id]
-  subnets                = module.vpc.public_subnet
+  subnets                = module.vpc.public_subnet_ids
 
   target_group_name      = "${var.tags["Name"]}-example-pl-tg"
   target_group_port      = var.tg_port
@@ -65,7 +65,6 @@ module "pl_lb" {
   target_ids             = module.ec2.pl_instance_ids
   target_port            = var.pl_tg_attach_port
 }
-
 # Internal (IL) load balancer
 module "il_lb" {
   source = "../../modules/alb"

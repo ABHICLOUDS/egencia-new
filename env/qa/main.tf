@@ -24,7 +24,7 @@ module "vpc" {
 }
 
 module "ec2" {
-  source                     = "../../modules/ec2"
+  source                     = "../../modules/ec-2"
   vpc_id                     = module.vpc.vpc_id
   bucket_name                = var.bucket_name
   bucket_pl_script           = var.bucket_pl_script

@@ -7,83 +7,103 @@ terraform {
   }
 }
 
+# main.tf
+
 provider "aws" {
-  region = var.aws_region
+  region = "us-east-1"
 }
 
+# main.tf
+
 module "vpc" {
-  source                      = "../../modules/vpc"
-  appname                     = var.appname
-  env                         = var.env
-  tags                        = var.tags
-  vpc_cidr_block              = var.vpc_cidr_block
-  public_subnet_cidr_blocks   = var.public_subnet_cidr_blocks
-  public_subnet_azs           = var.public_subnet_azs
-  private_subnet_cidr_blocks  = var.private_subnet_cidr_blocks
-  private_subnet_azs          = var.private_subnet_azs
+  source  = "./vpc"
+  # Pass module-specific variables here
+  vpc_cidr_block             = "10.0.0.0/16"
+  public_subnet_cidr_blocks  = ["10.0.1.0/24", "10.0.2.0/24"]
+  private_subnet_cidr_blocks = ["10.0.3.0/24", "10.0.4.0/24"]
+  availability_zones         = ["us-east-1a", "us-east-1b"]
+  security_group_name        = "example-security-group"
+  security_group_description = "Example security group"
+  security_group_ingress_from_port   = 22
+  security_group_ingress_to_port     = 22
+  security_group_ingress_protocol    = "tcp"
+  security_group_ingress_cidr_blocks = ["0.0.0.0/0"]
+  security_group_egress_from_port    = 0
+  security_group_egress_to_port      = 0
+  tags = {
+    Name        = "Example VPC"
+    Environment = "Production"
+  }
 }
 
 module "ec2" {
-  source                     = "../../modules/ec-2"
-  vpc_id                     = module.vpc.vpc_id
-  bucket_name                = var.bucket_name
-  bucket_pl_script           = var.bucket_pl_script
-  pl_count                   = var.pl_count
-  il_count                   = var.il_count
-  ami_id                     = var.ami_id
-  instance_type              = var.instance_type
-  key_name                   = var.key_name
-  ebs_volume                 = var.ebs_volume
-  ebs_volume_type            = var.ebs_volume_type
-  instance_profile_name      = var.instance_profile_name
-  sg_port                    = var.sg_port
-  appname                    = var.appname
-  env                        = var.env
-  tags                       = var.tags
-  public_subnet_ids     = module.vpc.public-subnet
-  private_subnet_ids    = module.vpc.private-subnet
+  source  = "./ec2"
+  # Pass module-specific variables here
+  bucket_name            = "example-bucket"
+  bucket_pl_script       = "example-script.sh"
+  pl_count               = 2
+  il_count               = 2
+  instance_type          = "t2.micro"
+  ami_id                 = "ami-12345678"
+  key_name               = "example-key"
+  instance_profile_name  = "example-profile"
+  ebs_volume             = 50
+  ebs_volume_type        = "gp2"
+  tags = {
+    Name        = "Example EC2"
+    Environment = "Production"
+  }
+  public_subnet_ids      = module.vpc.public_subnet_ids
+  private_subnet_ids     = module.vpc.private_subnet_ids
+  vpc_id                 = module.vpc.vpc_id
 }
 
-# Internet-facing (PL) load balancer
-module "pl_lb" {
-  source = "../../modules/alb"
-
-  alb_name               = "${var.tags["Name"]}-example-pl-lb"
+module "pl_alb" {
+  source  = "./alb"
+  # Pass module-specific variables here
+  alb_name               = "pl-example-alb"
   internal               = false
   load_balancer_type     = "application"
-  security_groups        = [aws_security_group.example.id]
-  subnets                = module.vpc.public_subnet
-
-  target_group_name      = "${var.tags["Name"]}-example-pl-tg"
-  target_group_port      = var.tg_port
-  target_group_protocol  = var.tg_protocol
+  security_groups        = [module.vpc.security_group_id]
+  subnets                = module.vpc.public_subnet_ids
+  target_group_name      = "pl-example-target-group"
+  target_group_port      = 80
+  target_group_protocol  = "HTTP"
   vpc_id                 = module.vpc.vpc_id
-  health_check_path      = var.pl_hc_path
-  listener_port          = var.pl_listener_port
-  listener_protocol      = var.pl_listener_protocol
-  target_count           = var.pl_count
+  health_check_path      = "/"
+  listener_port          = 80
+  listener_protocol      = "HTTP"
+  target_count           = module.ec2.pl_count
   target_ids             = module.ec2.pl_instance_ids
-  target_port            = var.pl_tg_attach_port
+  target_port            = 8080
+  tags = {
+    Name        = "Public Example ALB"
+    Environment = "Production"
+  }
 }
-# Internal (IL) load balancer
-module "il_lb" {
-  source = "../../modules/alb"
 
-  alb_name               = "${var.tags["Name"]}-example-il-lb"
+module "il_alb" {
+  source  = "./alb"
+  # Pass module-specific variables here
+  alb_name               = "il-example-alb"
   internal               = true
   load_balancer_type     = "application"
-  security_groups        = [aws_security_group.example.id]
-  subnets                = module.vpc.private_subnet
-
-  target_group_name      = "${var.tags["Name"]}-example-il-tg"
-  target_group_port      = var.tg_port
-  target_group_protocol  = var.tg_protocol
+  security_groups        = [module.vpc.security_group_id]
+  subnets                = module.vpc.private_subnet_ids
+  target_group_name      = "il-example-target-group"
+  target_group_port      = 8080
+  target_group_protocol  = "HTTP"
   vpc_id                 = module.vpc.vpc_id
-  health_check_path      = var.il_hc_path
-  listener_port          = var.il_listener_port
-  listener_protocol      = var.il_listener_protocol
-  target_count           = var.il_count
+  health_check_path      = "/"
+  listener_port          = 8080
+  listener_protocol      = "HTTP"
+  target_count           = module.ec2.il_count
   target_ids             = module.ec2.il_instance_ids
-  target_port            = var.il_tg_attach_port
+  target_port            = 8080
+  tags = {
+    Name        = "Internal Example ALB"
+    Environment = "Production"
+  }
 }
+
 

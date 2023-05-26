@@ -1,3 +1,5 @@
+# main.tf (inside ALB module)
+
 resource "aws_lb" "example_lb" {
   name               = var.alb_name
   internal           = var.internal

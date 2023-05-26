@@ -1,134 +1,131 @@
-variable "aws_region" {
-type=string
-}
+# # variables.tf
 
-#VPC Variables
-variable "vpc_cidr_block" {
-type=string
-}
+# variable "aws_region" {
+#   description = "AWS region"
+#   default     = "us-west-2"
+# }
 
-variable "public_subnet_cidr_blocks" {
-  type = list(string)
-}
+# variable "appname" {
+#   description = "Application name"
+# }
 
-variable "private_subnet_cidr_blocks" {
-  type = list(string)
-}
+# variable "env" {
+#   description = "Environment"
+# }
 
-variable "public_subnet_azs" {
-  type = list(string)
-}
+# variable "tags" {
+#   description = "Tags for resources"
+#   type        = map(string)
+# }
 
-variable "private_subnet_azs" {
-  type = list(string)
-}
+# variable "vpc_cidr_block" {
+#   description = "CIDR block for VPC"
+# }
 
-variable "tags" {
-  type = map(string)
-}
+# variable "public_subnet_cidr_blocks" {
+#   description = "CIDR blocks for public subnets"
+#   type        = list(string)
+# }
 
+# variable "public_subnet_azs" {
+#   description = "Availability zones for public subnets"
+#   type        = list(string)
+# }
 
-variable "appname" {
-  type = string
-}
+# variable "private_subnet_cidr_blocks" {
+#   description = "CIDR blocks for private subnets"
+#   type        = list(string)
+# }
 
-variable "env" {
-  type = string
-}
+# variable "private_subnet_azs" {
+#   description = "Availability zones for private subnets"
+#   type        = list(string)
+# }
 
-#Ec2 Variables
+# # Define other variables
 
-variable "bucket_name" {
-  type = string
-}
-variable "bucket_pl_script" {
-  type = string
-}
+# variable "bucket_name" {
+#   description = "Bucket name for scripts"
+# }
 
-variable "sg_port" {
-  type = list(number)
-}
+# variable "bucket_pl_script" {
+#   description = "Path to PL script in bucket"
+# }
 
-variable "pl_count" {
-  type = number
-}
+# variable "pl_count" {
+#   description = "Count of PL instances"
+#   type        = number
+# }
 
-variable "il_count" {
-  type = number
-}
+# variable "il_count" {
+#   description = "Count of IL instances"
+#   type        = number
+# }
 
-variable "instance_type" {
-  type = string
-}
+# variable "ami_id" {
+#   description = "AMI ID"
+# }
 
-variable "ami_id" {
-  type = string
-}
+# variable "instance_type" {
+#   description = "EC2 instance type"
+# }
 
-variable "key_name" {
-  type = string
-}
+# variable "key_name" {
+#   description = "Key pair name"
+# }
 
-variable "instance_profile_name" {
-  type = string
-}
-variable "ebs_volume" {
-  type = number
-}
+# variable "ebs_volume" {
+#   description = "EBS volume size (in GB)"
+#   type        = number
+# }
 
-variable "ebs_volume_type" {
-  type = string
-}
+# variable "ebs_volume_type" {
+#   description = "EBS volume type"
+# }
 
-#PL ALB Variable
+# variable "instance_profile_name" {
+#   description = "Instance profile name"
+# }
 
-variable "tg_port" {
-  description = "The port on which targets receive traffic from the load balancer"
-  type        = number
-}
+# variable "sg_port" {
+#   description = "Security group port"
+#   type        = number
+# }
 
-variable "tg_protocol" {
-  description = "The protocol to use for routing traffic to targets"
-  type        = string
-}
+# variable "pl_hc_path" {
+#   description = "Path for PL health check"
+# }
 
-variable "pl_hc_path" {
-  description = "The destination for the health check request"
-  type        = string
-}
+# variable "pl_listener_port" {
+#   description = "Port for PL listener"
+#   type        = number
+# }
 
-variable "pl_listener_port" {
-  description = "The port on which the load balancer listens for incoming traffic"
-  type        = number
-}
+# variable "pl_listener_protocol" {
+#   description = "Protocol for PL listener"
+# }
 
-variable "pl_listener_protocol" {
-  description = "The protocol to use for the listener"
-  type        = string
-}
+# variable "pl_tg_attach_port" {
+#   description = "Port for attaching targets to PL target group"
+#   type        = number
+# }
 
-variable "pl_tg_attach_port" {
-  description = "The port to use to connect with the target"
-  type        = number
-}
+# variable "il_hc_path" {
+#   description = "Path for IL health check"
+# }
 
-#IL ALB Variable
-variable "il_hc_path" {
-  description = "The destination for the health check request"
-  type        = string
-}
+# variable "il_listener_port" {
+#   description = "Port for IL listener"
+#   type        = number
+# }
 
-variable "il_listener_port" {
-  description = "The port on which the load balancer listens for incoming traffic"
-  type        = number
-}
+# variable "il_listener_protocol" {
+#   description = "Protocol for IL listener"
+# }
 
-variable "il_listener_protocol" {
-  description = "The protocol to use for the listener"
-  type        = string
-}
+# variable "il_tg_attach_port" {
+#   description = "Port for attaching targets to IL target group"
+#   type        = number
+# }
 
-variable "il_tg_attach_port" {
-  description = "The port to use to connect with the target"
-  type        = number
-}
+# # Define other variables

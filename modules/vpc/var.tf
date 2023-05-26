@@ -1,32 +1,33 @@
+# variables.tf (inside VPC module)
+
 variable "vpc_cidr_block" {
-    type=string
+  type    = string
 }
 
 variable "public_subnet_cidr_blocks" {
-  type = list(string)
+  type    = list(string)
 }
 
 variable "private_subnet_cidr_blocks" {
-  type = list(string)
+  type    = list(string)
 }
 
 variable "public_subnet_azs" {
-  type = list(string)
+  type    = list(string)
 }
 
 variable "private_subnet_azs" {
-  type = list(string)
+  type    = list(string)
 }
 
 variable "tags" {
-  type = map(string)
+  type    = map(string)
 }
 
-
 variable "appname" {
-  type = string
+  type    = string
 }
 
 variable "env" {
-  type = string
+  type    = string
 }

@@ -1,6 +1,9 @@
+# variables.tf (inside EC2 module)
+
 variable "bucket_name" {
   type = string
 }
+
 variable "bucket_pl_script" {
   type = string
 }
@@ -32,6 +35,7 @@ variable "key_name" {
 variable "instance_profile_name" {
   type = string
 }
+
 variable "ebs_volume" {
   type = number
 }
@@ -44,7 +48,6 @@ variable "tags" {
   type = map(string)
 }
 
-
 variable "appname" {
   type = string
 }
@@ -55,16 +58,12 @@ variable "env" {
 
 variable "public_subnet_ids" {
   type    = list(string)
-  
 }
 
 variable "private_subnet_ids" {
   type    = list(string)
-  
 }
 
 variable "vpc_id" {
   type    = string
 }
-
-

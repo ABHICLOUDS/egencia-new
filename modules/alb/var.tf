@@ -1,59 +1,61 @@
+# variables.tf (inside ALB module)
+
 variable "alb_name" {
-  type        = string
+  type = string
 }
 
 variable "internal" {
-  type        = bool
+  type = bool
 }
 
 variable "load_balancer_type" {
-  type        = string
+  type = string
 }
 
 variable "security_groups" {
-  type        = list(string)
+  type = list(string)
 }
 
 variable "subnets" {
-  type        = list(string)
+  type = list(string)
 }
 
 variable "target_group_name" {
-  type        = string
+  type = string
 }
 
 variable "target_group_port" {
-  type        = number
+  type = number
 }
 
 variable "target_group_protocol" {
-  type        = string
+  type = string
 }
 
 variable "vpc_id" {
-  type        = string
+  type = string
 }
 
 variable "health_check_path" {
-  type        = string
+  type = string
 }
 
 variable "listener_port" {
-  type        = number
+  type = number
 }
 
 variable "listener_protocol" {
-  type        = string
+  type = string
 }
 
 variable "target_count" {
-  type        = number
+  type = number
 }
 
 variable "target_ids" {
-  type        = list(string)
+  type = list(string)
 }
 
 variable "target_port" {
-  type        = number
+  type = number
 }

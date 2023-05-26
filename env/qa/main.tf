@@ -15,6 +15,8 @@ provider "aws" {
 
 # main.tf
 
+# main.tf
+
 module "vpc" {
   source  = "../../modules/vpc"
   # Pass module-specific variables here
@@ -36,31 +38,8 @@ module "vpc" {
   }
 }
 
-# main.tf
-
-module "vpc" {
-  source  = "./vpc"
-  # Pass module-specific variables here
-  vpc_cidr_block             = "10.0.0.0/16"
-  public_subnet_cidr_blocks  = ["10.0.1.0/24", "10.0.2.0/24"]
-  private_subnet_cidr_blocks = ["10.0.3.0/24", "10.0.4.0/24"]
-  availability_zones         = ["us-east-1a", "us-east-1b"]
-  security_group_name        = "example-security-group"
-  security_group_description = "Example security group"
-  security_group_ingress_from_port   = 22
-  security_group_ingress_to_port     = 22
-  security_group_ingress_protocol    = "tcp"
-  security_group_ingress_cidr_blocks = ["0.0.0.0/0"]
-  security_group_egress_from_port    = 0
-  security_group_egress_to_port      = 0
-  tags = {
-    Name        = "Example VPC"
-    Environment = "Production"
-  }
-}
-
 module "ec2" {
-  source  = "./ec2"
+  source  = "../../modules/ec-2"
   # Pass module-specific variables here
   appname                  = "example-app"
   env                      = "production"
@@ -85,7 +64,7 @@ module "ec2" {
 }
 
 module "pl_alb" {
-  source  = "./alb"
+  source  = "../../modules/alb"
   # Pass module-specific variables here
   alb_name               = "pl-example-alb"
   internal               = false
@@ -109,7 +88,7 @@ module "pl_alb" {
 }
 
 module "il_alb" {
-  source  = "./alb"
+  source  = "../../modules/alb"
   # Pass module-specific variables here
   alb_name               = "il-example-alb"
   internal               = true
@@ -131,5 +110,6 @@ module "il_alb" {
     Environment = "Production"
   }
 }
+
 
 

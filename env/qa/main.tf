@@ -59,7 +59,7 @@ module "ec2" {
 }
 
 module "pl_alb" {
-  source  = "../../../modules/alb"
+  source  = "../../modules/alb"
   # Pass module-specific variables here
   alb_name               = "pl-example-alb"
   internal               = false

@@ -40,6 +40,52 @@ module "ec-2" {
   appname                     = var.appname
   env                         = var.env
   tags                        = var.tags
-  public_subnet_ids           = module.vpc.public-subnet
-  private_subnet_ids          = module.vpc.private-subnet
+  public_subnet_ids           = module.vpc.public_subnet_ids
+  private_subnet_ids          = module.vpc.private_subnet_ids
+}
+
+# Internet-facing (PL) load balancer
+module "pl_lb" {
+  source = "./modules/load_balancer"
+
+  name               = "${var.tags["Name"]}-example-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.example.id]
+  subnets            = module.vpc.public_subnet_ids
+
+  target_group_name        = "${var.tags["Name"]}-example-tg"
+  target_group_port        = var.tg_port
+  target_group_protocol    = var.tg_protocol
+  vpc_id                   = module.vpc.vpc_id
+  health_check_path        = var.pl_hc_path
+  listener_port            = var.pl_listener_port
+  listener_protocol        = var.pl_listener_protocol
+  target_count             = module.ec-2.pl_count
+  target_ids               = aws_instance.example_instances[*].id
+  target_port              = var.pl_tg_attach_port
+
+  tags = var.tags
+}
+
+# Internal (IL) load balancer
+module "il_lb" {
+  source = "./modules/load_balancer"
+
+  name               = "${var.tags["Name"]}-example-ilb"
+  internal           = true
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.example.id]
+  subnets            = module.vpc.private_subnet_ids
+  target_group_name        = "${var.tags["Name"]}-example-itg"
+  target_group_port        = var.tg_port
+  target_group_protocol    = var.tg_protocol
+  vpc_id                   = module.vpc.vpc_id
+  health_check_path        = var.il_hc_path
+  listener_port            = var.il_listener_port
+  listener_protocol        = var.il_listener_protocol
+  target_count             = module.ec-2.il_count
+  target_ids               = aws_instance.example_instances-2[*].id
+  target_port              = var.il_tg_attach_port
+  tags = var.tags
 }

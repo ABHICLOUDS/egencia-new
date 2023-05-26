@@ -65,7 +65,9 @@ module "pl_lb" {
   target_ids             = module.ec-2.pl_instance_ids
   target_port            = var.pl_tg_attach_port
 
-  tags = var.tags
+   tags = {
+    Name = "${var.tags["Name"]}-pl-lb"
+  }
 }
 
 # Internal (IL) load balancer
@@ -89,5 +91,7 @@ module "il_lb" {
   target_ids             = module.ec-2.il_instance_ids
   target_port            = var.il_tg_attach_port
 
-  tags = var.tags
+   tags = {
+    Name = "${var.tags["Name"]}-il-lb"
+  }
 }

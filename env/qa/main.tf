@@ -40,8 +40,8 @@ module "ec2" {
   appname                    = var.appname
   env                        = var.env
   tags                       = var.tags
-  public_subnet_ids          = module.vpc.public_subnet_ids
-  private_subnet_ids         = module.vpc.private_subnet_ids
+  public_subnet_ids     = module.vpc.public-subnet
+  private_subnet_ids    = module.vpc.private-subnet
 }
 
 # Internet-facing (PL) load balancer

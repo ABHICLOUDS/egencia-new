@@ -24,7 +24,7 @@ module "vpc" {
 }
 
 module "ec2" {
-  source                     = "../../modules/ec-2"
+  source                     = "../../modules/ec2"
   vpc_id                     = module.vpc.vpc_id
   bucket_name                = var.bucket_name
   bucket_pl_script           = var.bucket_pl_script
@@ -62,7 +62,7 @@ module "pl_lb" {
   listener_port          = var.pl_listener_port
   listener_protocol      = var.pl_listener_protocol
   target_count           = var.pl_count
-  target_ids             = module.ec2.pl_instance_ids
+  target_ids             = module.ec2.instance_ids_pl
   target_port            = var.pl_tg_attach_port
 }
 
@@ -84,7 +84,7 @@ module "il_lb" {
   listener_port          = var.il_listener_port
   listener_protocol      = var.il_listener_protocol
   target_count           = var.il_count
-  target_ids             = module.ec2.il_instance_ids
+  target_ids             = module.ec2.instance_ids_il
   target_port            = var.il_tg_attach_port
 }
 

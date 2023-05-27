@@ -51,25 +51,25 @@ module "ec2" {
   }
 }
 
-# module "pl_alb" {
-#   source  = "../../modules/alb"
-#   # Pass module-specific variables here
-#   alb_name               = "pl-example-alb"
-#   internal               = false
-#   load_balancer_type     = "application"
-#   security_groups        = [module.vpc.security_group_id]
-#   subnets                = module.vpc.public_subnet_ids
-#   target_group_name      = "pl-example-target-group"
-#   target_group_port      = 80
-#   target_group_protocol  = "HTTP"
-#   vpc_id                 = module.vpc.vpc_id
-#   health_check_path      = "/"
-#   listener_port          = 80
-#   listener_protocol      = "HTTP"
-#   target_count           = module.ec2.pl_count
-#   target_ids             = module.ec2.pl_instance_ids
-#   target_port            = 8080
-# }
+module "pl_alb" {
+  source  = "../../modules/alb"
+  # Pass module-specific variables here
+  alb_name               = "pl-example-alb"
+  internal               = false
+  load_balancer_type     = "application"
+  security_groups        = [module.ec2.sg_id]
+  subnets                = module.vpc.public_subnet_ids
+  target_group_name      = "pl-example-target-group"
+  target_group_port      = 80
+  target_group_protocol  = "HTTP"
+  vpc_id                 = module.vpc.vpc_id
+  health_check_path      = "/"
+  listener_port          = 80
+  listener_protocol      = "HTTP"
+  target_count           = module.ec2.pl_count
+  target_ids             = module.ec2.pl_instance_ids
+  target_port            = 8080
+}
 
 # module "il_alb" {
 #   source  = "../../modules/alb"

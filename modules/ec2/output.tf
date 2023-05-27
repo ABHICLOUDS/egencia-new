@@ -12,3 +12,7 @@ output "sg_id" {
   value = aws_security_group.example.id
 }
 
+output "pl_instance_ids" {
+  value = aws_instance.example_instances[*].id
+}
+

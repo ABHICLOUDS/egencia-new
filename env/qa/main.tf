@@ -26,6 +26,9 @@ module "vpc" {
   private_subnet_azs        = ["us-east-1a", "us-east-1b"]
   security_group_name       = "example-security-group"
   security_group_description = "Example security group"
+   tags                  = {
+  env = "QA-Egencia"
+}
   security_group_ingress = [
     {
       from_port   = 22
@@ -63,6 +66,9 @@ module "ec2" {
   public_subnet_ids  = module.vpc.public_subnet_ids
   private_subnet_ids = module.vpc.private_subnet_ids
   vpc_id             = module.vpc.vpc_id
+  tags                  = {
+  env = "QA-Egencia"
+}
 }
 
 module "pl_alb" {

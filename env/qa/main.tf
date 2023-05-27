@@ -63,7 +63,7 @@ module "pl_alb" {
   target_group_port      = 80
   target_group_protocol  = "HTTP"
   vpc_id                 = module.vpc.vpc_id
-  health_check_path      = "/"
+  health_check_path      = "/egencia/index"
   listener_port          = 80
   listener_protocol      = "HTTP"
   target_count           = module.ec2.pl_count

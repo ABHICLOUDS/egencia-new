@@ -6,10 +6,6 @@ resource "aws_lb" "example_lb" {
   load_balancer_type = var.load_balancer_type
   security_groups    = var.security_groups
   subnets            = var.subnets
-
-  tags = {
-    Name = var.name
-  }
 }
 
 resource "aws_lb_target_group" "example_target_group" {

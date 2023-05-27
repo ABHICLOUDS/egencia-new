@@ -18,6 +18,7 @@ provider "aws" {
 module "vpc" {
   source  = "../../modules/vpc"
   # Pass module-specific variables here
+  vpc_cidr_block ="10.0.0.0/20"
   appname                   = "example-vpc"
   env                       = "production"
   public_subnet_cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24"]

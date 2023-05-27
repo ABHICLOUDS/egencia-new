@@ -11,7 +11,7 @@ resource "aws_subnet" "public_subnets" {
   count                  = length(var.public_subnet_cidr_blocks)
   cidr_block             = var.public_subnet_cidr_blocks[count.index]
   vpc_id                 = aws_vpc.this_vpc.id
-  availability_zone      = var.availability_zones[count.index]
+  availability_zone      = var.public_subnet_azs[count.index]
   map_public_ip_on_launch = true
   tags                      = merge(var.tags, { "Name" = format("%s-%s-public-sub-%d", var.appname, var.env, count.index + 1) })
 }
@@ -21,7 +21,7 @@ resource "aws_subnet" "private_subnets" {
   count             = length(var.private_subnet_cidr_blocks)
   cidr_block        = var.private_subnet_cidr_blocks[count.index]
   vpc_id            = aws_vpc.this_vpc.id
-  availability_zone = var.availability_zones[count.index]
+  availability_zone = var.private_subnet_azs[count.index]
   tags                      = merge(var.tags, { "Name" = format("%s-%s-private-sub-%d", var.appname, var.env, count.index + 1) })
 }
 

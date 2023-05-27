@@ -7,3 +7,8 @@ output "pl_count" {
 output "il_count" {
   value = var.il_count
 }
+
+output "sg_id" {
+  value = aws_security_group.example.id
+}
+

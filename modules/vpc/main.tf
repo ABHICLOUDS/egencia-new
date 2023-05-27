@@ -2,6 +2,7 @@
 
 resource "aws_vpc" "this_vpc" {
   cidr_block = var.vpc_cidr_block
+  instance_tenancy = "default"
   tags       = merge(var.tags, { "Name" = format("%s-%s-vpc", var.appname, var.env) })
 }
 
@@ -12,7 +13,7 @@ resource "aws_subnet" "public_subnets" {
   vpc_id                 = aws_vpc.this_vpc.id
   availability_zone      = var.public_subnet_azs[count.index]
   map_public_ip_on_launch = true
-  tags                   = merge(var.tags, { "Name" = format("%s-%s-public-sub", var.appname, var.env) })
+  tags                      = merge(var.tags, { "Name" = format("%s-%s-public-sub-%d", var.appname, var.env, count.index + 1) })
 }
 
 # Create private subnets
@@ -21,7 +22,7 @@ resource "aws_subnet" "private_subnets" {
   cidr_block        = var.private_subnet_cidr_blocks[count.index]
   vpc_id            = aws_vpc.this_vpc.id
   availability_zone = var.private_subnet_azs[count.index]
-  tags              = merge(var.tags, { "Name" = format("%s-%s-private-sub", var.appname, var.env) })
+  tags                      = merge(var.tags, { "Name" = format("%s-%s-private-sub-%d", var.appname, var.env, count.index + 1) })
 }
 
 # Create internet gateway

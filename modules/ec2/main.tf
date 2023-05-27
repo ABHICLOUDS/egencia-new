@@ -14,7 +14,7 @@ resource "aws_instance" "example_instances" {
   vpc_security_group_ids    = [aws_security_group.example_sg1.id, aws_security_group.example.id]
   iam_instance_profile      = var.instance_profile_name
   user_data                 = data.aws_s3_object.user_data_script.body
-  tags                      = merge(var.tags, { "Name" = format("%s-%s-pl-instance", var.appname, var.env) })
+  tags                      = merge(var.tags, { "Name" = format("%s-%s-pl-instance", var.appname, var.env, count.index + 1) })
 
   root_block_device {
     volume_size = var.ebs_volume
@@ -30,7 +30,7 @@ resource "aws_instance" "example_instance_2" {
   subnet_id                 = element(var.private_subnet_ids, count.index)
   vpc_security_group_ids    = [aws_security_group.example_sg2.id, aws_security_group.example.id]
   iam_instance_profile      = var.instance_profile_name
-  tags                      = merge(var.tags, { "Name" = format("%s-%s-il-instance-tf", var.appname, var.env) })
+  tags                      = merge(var.tags, { "Name" = format("%s-%s-il-instance-tf", var.appname, var.env, count.index + 1) })
   root_block_device {
     volume_size = var.ebs_volume
     volume_type = var.ebs_volume_type

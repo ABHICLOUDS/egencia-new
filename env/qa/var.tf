@@ -64,7 +64,7 @@ variable "il_tg_name" {}
 
 variable "il_tg_port" {}
 
-variable "pl_tg_protocol" {}
+variable "il_tg_protocol" {}
 
 variable "il_hc_path" {}
 

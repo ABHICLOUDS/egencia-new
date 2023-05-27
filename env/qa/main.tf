@@ -89,10 +89,7 @@ module "pl_alb" {
   target_count           = module.ec2.pl_count
   target_ids             = module.ec2.pl_instance_ids
   target_port            = 8080
-  tags = {
-    Name        = "Public Example ALB"
-    Environment = "Production"
-  }
+  
 }
 
 module "il_alb" {
@@ -113,10 +110,7 @@ module "il_alb" {
   target_count           = module.ec2.il_count
   target_ids             = module.ec2.il_instance_ids
   target_port            = 8080
-  tags = {
-    Name        = "Internal Example ALB"
-    Environment = "Production"
-  }
+  
 }
 
 

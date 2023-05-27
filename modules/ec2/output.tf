@@ -17,6 +17,6 @@ output "pl_instance_ids" {
 }
 
 output "il_instance_ids" {
-  value = aws_instance.example_instances_2[*].id
+  value = aws_instance.example_instance_2[*].id
 }
 

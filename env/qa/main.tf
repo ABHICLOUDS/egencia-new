@@ -60,7 +60,7 @@ module "pl_alb" {
   target_group_protocol  = var.pl_tg_protocol
   vpc_id                 = module.vpc.vpc_id
   health_check_path      = var.pl_hc_path
-  listener_port          = var.pl_listen_port
+  listener_port          = var.pl_listener_port
   listener_protocol      = var.pl_listener_protocol
   target_count           = module.ec2.pl_count
   target_ids             = module.ec2.pl_instance_ids

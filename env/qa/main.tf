@@ -18,11 +18,13 @@ provider "aws" {
 module "vpc" {
   source  = "../../modules/vpc"
   # Pass module-specific variables here
-  vpc_cidr_block     = "10.0.0.0/16"
-  public_subnet_cidr = ["10.0.1.0/24", "10.0.2.0/24"]
-  private_subnet_cidr = ["10.0.3.0/24", "10.0.4.0/24"]
-  availability_zones = ["us-east-1a", "us-east-1b"]
-  security_group_name = "example-security-group"
+  appname                   = "example-vpc"
+  env                       = "production"
+  public_subnet_cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24"]
+  private_subnet_cidr_blocks = ["10.0.3.0/24", "10.0.4.0/24"]
+  public_subnet_azs         = ["us-east-1a", "us-east-1b"]
+  private_subnet_azs        = ["us-east-1a", "us-east-1b"]
+  security_group_name       = "example-security-group"
   security_group_description = "Example security group"
   security_group_ingress = [
     {
@@ -40,14 +42,10 @@ module "vpc" {
       cidr_blocks = ["0.0.0.0/0"]
     }
   ]
-  tags = {
-    Name        = "Example VPC"
-    Environment = "Production"
-  }
 }
 
 module "ec2" {
-  source  = "../../modules/ec-2"
+  source  = "../../modules/ec2"
   # Pass module-specific variables here
   appname          = "example-app"
   env              = "production"
@@ -62,10 +60,6 @@ module "ec2" {
   instance_profile_name = "example-profile"
   ebs_volume       = 50
   ebs_volume_type  = "gp2"
-  tags = {
-    Name        = "Example EC2"
-    Environment = "Production"
-  }
   public_subnet_ids  = module.vpc.public_subnet_ids
   private_subnet_ids = module.vpc.private_subnet_ids
   vpc_id             = module.vpc.vpc_id
@@ -89,7 +83,6 @@ module "pl_alb" {
   target_count           = module.ec2.pl_count
   target_ids             = module.ec2.pl_instance_ids
   target_port            = 8080
-  
 }
 
 module "il_alb" {
@@ -105,12 +98,11 @@ module "il_alb" {
   target_group_protocol  = "HTTP"
   vpc_id                 = module.vpc.vpc_id
   health_check_path      = "/"
-  listener_port          = 8080
+  listener_port          = 80
   listener_protocol      = "HTTP"
   target_count           = module.ec2.il_count
   target_ids             = module.ec2.il_instance_ids
   target_port            = 8080
-  
 }
 
 

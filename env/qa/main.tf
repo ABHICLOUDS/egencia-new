@@ -25,27 +25,27 @@ module "vpc" {
   private_subnet_cidr_blocks = ["10.0.3.0/24", "10.0.4.0/24"]
   public_subnet_azs         = ["us-east-1a", "us-east-1b"]
   private_subnet_azs        = ["us-east-1a", "us-east-1b"]
-  security_group_name       = "example-security-group"
-  security_group_description = "Example security group"
+  # security_group_name       = "example-security-group"
+  # security_group_description = "Example security group"
    tags                  = {
   env = "QA-Egencia"
 }
-  security_group_ingress = [
-    {
-      from_port   = 22
-      to_port     = 22
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-  ]
-  security_group_egress = [
-    {
-      from_port   = 0
-      to_port     = 0
-      protocol    = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-  ]
+  # security_group_ingress = [
+  #   {
+  #     from_port   = 22
+  #     to_port     = 22
+  #     protocol    = "tcp"
+  #     cidr_blocks = ["0.0.0.0/0"]
+  #   }
+  # ]
+  # security_group_egress = [
+  #   {
+  #     # from_port   = 0
+  #     to_port     = 0
+  #     protocol    = "-1"
+  #     cidr_blocks = ["0.0.0.0/0"]
+  #   }
+  # ]
 }
 
 module "ec2" {

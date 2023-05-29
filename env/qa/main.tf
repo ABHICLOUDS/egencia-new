@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket         = "egencia-demo-s3-tf-state"
-    key            = "egencia/terraform.tfstate/"
+    key            = "egencia/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "egencia-demo-db"
     encrypt        = true
